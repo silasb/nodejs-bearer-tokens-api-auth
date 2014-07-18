@@ -1,0 +1,26 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "browserify": "^4.1.11",
+    "envify": "^1.2.1",
+    "express": "3.0.6",
+    "jade": "*",
+    "jsonwebtoken": "^0.4.0",
+    "literalify": "^0.3.0",
+    "react": "^0.10.0",
+    "react-tools": "^0.10.0",
+    "rethinkdb": "^1.13.0-0"
+  },
+  "devDependencies": {
+    "minimist": "^0.2.0",
+    "passport": "^0.2.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "^1.0.0"
+  }
+}
