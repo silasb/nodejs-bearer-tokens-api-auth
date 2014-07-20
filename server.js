@@ -1,3 +1,11 @@
+/**
+ * Configuration
+ */
+
+var config = {
+  username: 'silas',
+  password: 'test'
+};
 
 /**
  * Module dependencies.
@@ -52,8 +60,8 @@ r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
           console.log(JSON.stringify(result, null, 2));
 
           r.table('users').insert({
-            username: 'silas',
-            password: bcrypt.hashSync("test"),
+            username: config.username,
+            password: bcrypt.hashSync(config.password),
           }).run(conn, function(err, result) {
             if (err) throw err;
 
