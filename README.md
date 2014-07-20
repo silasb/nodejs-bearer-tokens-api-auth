@@ -6,3 +6,13 @@ This method of authentication is using `bearer` token to easily create a token c
 
 * rethinkdb
 * nodejs
+
+## Startup
+
+In one terminal:
+
+	rethinkdb
+
+In another terminal:
+
+	node server.js
