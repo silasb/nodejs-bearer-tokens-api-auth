@@ -1,0 +1,26 @@
+{
+  "name": "AuthApp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/silasb/nodejs-bearer-tokens-api-auth",
+  "authors": [
+    "silasb <silas.baronda@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests",
+    "public/components"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.1.0",
+    "bootstrap": "~3.2.0",
+    "jquery": "~2.1.1",
+    "react": "~0.11.0",
+    "sammy": "~0.7.5"
+  }
+}

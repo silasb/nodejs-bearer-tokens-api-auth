@@ -15,4 +15,5 @@ In one terminal:
 
 In another terminal:
 
+	bower install
 	node server.js
