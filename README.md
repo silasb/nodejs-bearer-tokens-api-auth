@@ -13,7 +13,11 @@ In one terminal:
 
 	rethinkdb
 
-In another terminal:
+In another terminal (first use):
 
 	bower install
+	node server.js --createdb
+
+After initial install and DB setup:
+
 	node server.js
