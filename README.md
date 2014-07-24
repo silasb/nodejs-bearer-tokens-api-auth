@@ -6,6 +6,7 @@ This method of authentication is using `bearer` token to easily create a token c
 
 * rethinkdb
 * nodejs
+* bower
 
 ## Startup
 
@@ -15,6 +16,7 @@ In one terminal:
 
 In another terminal (first use):
 
+	npm install
 	bower install
 	node server.js --createdb
 
