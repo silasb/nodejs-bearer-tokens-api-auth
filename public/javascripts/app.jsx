@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+var request = superagent;
+
 App = {}
 
 // setup ajax to catch all 401 not authorized errors.
@@ -20,28 +22,6 @@ var app = Sammy('.content', function() {
   this.get('#/', function() {
     // React.renderComponent(Hello({ name: 'world'}), document.getElementById('components') )
     React.renderComponent(loginComponent(), $('.content')[0] )
-  })
-
-  this.post('#/login', function(ctx) {
-
-    // console.log($.param(ctx.params.toHash()))
-
-    $.post('/login', $.param(ctx.params.toHash())).
-      success(function(auth) {
-        console.log(auth)
-
-        App.auth = auth;
-
-        // ctx.swap('hello')
-        ctx.redirect('#/dashboard')
-      }).
-      fail(function(res) {
-        if (res.state == 401) {
-          console.log('not authorized')
-        }
-      })
-
-    return false
   })
 
   this.get('#/login', function(ctx) {
@@ -80,15 +60,15 @@ var DashboardComponent = React.createClass({
   handleClick: function(e) {
     e.preventDefault();
 
-    $.ajax({
-      url: '/api/me',
-      type: 'GET',
-      headers: {'Authorization': 'Bearer ' + App.auth.token},
-      // beforeSend: function(xhs) {xhr.setRequestHeader('X-Token', App.auth.token)},
-      // success: function() {console.log('success')}
-    }).
-      done(function(res) { console.log('success')}).
-      fail(function(res) { console.log('fail')})
+    request
+      .get('/api/me')
+      .set({'Authorization': 'Bearer ' + App.auth.token})
+      .on('error', function(res) {
+        console.log('failed')
+      })
+      .end(function(res) {
+        console.log('success')
+      })
   },
 
   render: function() {
@@ -131,26 +111,26 @@ var loginComponent = React.createClass({
   handleLogin: function() {
     var $this = this;
 
-    $.ajax({
-        url: '/login',
-        type: 'POST',
-        data: $.param(this.state),
-      }).
-      done(function(data, textStatus, jqXHR) {
-        console.log(data)
-
-        App.auth = data;
-
-        React.renderComponent(linksComponents(), document.getElementById('links'))
-        React.unmountComponentAtNode(document.getElementById('flash'))
-
-        window.location = '#/dashboard'
-      }).
-      fail(function(jqXHR) {
-        if (jqXHR.status == 401) {
+    request
+      .post('/login')
+      .send($.param(this.state))
+      .on('error', function() {
+        console.log('5xx error')
+      })
+      .end(function(res) {
+        if (res.status != 200) {
           console.log('not authorized')
 
           React.renderComponent(FlashComponent({shown: true, message: 'Incorrect username or password.'}), document.getElementById('flash'))
+        } else {
+          auth = JSON.parse(res.text)
+
+          App.auth = auth;
+
+          React.renderComponent(linksComponents(), document.getElementById('links'))
+          React.unmountComponentAtNode(document.getElementById('flash'))
+
+          window.location = '#/dashboard'
         }
       })
   },
