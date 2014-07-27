@@ -120,7 +120,7 @@ var loginComponent = React.createClass({
         console.log('5xx error')
       })
       .end(function(res) {
-        if (res.status != 401) {
+        if (res.status == 401) {
           console.log('not authorized')
 
           React.renderComponent(FlashComponent({shown: true, message: 'Incorrect username or password.'}), document.getElementById('flash'))
