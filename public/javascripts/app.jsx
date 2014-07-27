@@ -29,13 +29,15 @@ var app = Sammy('.content', function() {
   })
 
   this.get('#/logout', function(ctx) {
-    $.ajax({
-      url: '/logout',
-      type: 'GET',
-      headers: {'Authorization': 'Bearer ' + App.auth.token},
-    }).
-      done(function(res) { delete App.auth }).
-      fail(function(res) { console.log('failed to logout')})
+    request
+      .get('/logout')
+      .set({'Authorization': 'Bearer ' + App.auth.token})
+      .on('error', function(res) {
+        console.log('failed to logout')
+      })
+      .end(function(res) {
+        delete App.auth
+      })
 
     React.renderComponent(linksComponents(), document.getElementById('links'))
 
