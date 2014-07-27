@@ -9,7 +9,7 @@ gulp.task('jsx', function() {
 
 var nodemon = require('gulp-nodemon');
 
-gulp.task('watch', function() {
+gulp.task('default', function() {
   gulp.watch('public/javascripts/*.jsx', ['jsx'])
 
   nodemon({script: 'server.js', watch: 'server.js'})
