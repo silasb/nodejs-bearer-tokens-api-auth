@@ -55,9 +55,6 @@ var app = Sammy('.content', function() {
   })
 })
 
-DOM = React.DOM,
-div = DOM.div, button = DOM.button, ul = DOM.ul, li = DOM.li, input = DOM.input, form = DOM.form
-
 var DashboardComponent = React.createClass({
   handleClick: function(e) {
     e.preventDefault();
