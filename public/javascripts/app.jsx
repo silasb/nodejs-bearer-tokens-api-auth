@@ -1,59 +1,61 @@
 /** @jsx React.DOM */
 
+// redefines
 var request = superagent;
 
+// Main application state
 App = {}
 
-// setup ajax to catch all 401 not authorized errors.
-// $.ajaxSetup({
-//   statusCode: {
-//     401: function(err){
-//       console.log('Login Failed.', err.responseJSON);
-//       // or whatever...
-//     }
-//   }
-// });
-
-var app = Sammy('.content', function() {
-  //this._checkFormSubmission = function(form) {
-    //return false;
-  //};
-
-  this.get('#/', function() {
-    // React.renderComponent(Hello({ name: 'world'}), document.getElementById('components') )
-    React.renderComponent(loginComponent(), $('.content')[0] )
-  })
-
-  this.get('#/login', function(ctx) {
-    React.renderComponent(loginComponent(), $('.content')[0] )
-  })
-
-  this.get('#/logout', function(ctx) {
-    request
-      .get('/logout')
-      .set({'Authorization': 'Bearer ' + App.auth.token})
-      .on('error', function(res) {
-        console.log('failed to logout')
-      })
-      .end(function(res) {
-        delete App.auth
-      })
-
-    React.renderComponent(linksComponents(), document.getElementById('links'))
-
-    ctx.redirect('#/')
-  })
-
-  this.before('#/dashboard', function() {
-    if (!App.auth){
-      this.redirect('#/login')
-    }
-  })
-
-  this.get('#/dashboard', function(ctx) {
+// Routing
+page('/', function(ctx, next) {
+  if (App.auth)
     React.renderComponent(DashboardComponent(), $('.content')[0])
-  })
+  else
+    React.renderComponent(loginComponent(), $('.content')[0] )
 })
+
+page('/login', function(ctx, next) {
+  React.renderComponent(loginComponent(), $('.content')[0] )
+})
+
+page('/logout', is_user_signed_in, function(ctx) {
+  request
+    .get('/logout')
+    .set({'Authorization': 'Bearer ' + App.auth.token})
+    .on('error', function(res) {
+      console.log('failed to logout')
+    })
+    .end(function(res) {
+      delete App.auth
+
+      React.renderComponent(linksComponents(), document.getElementById('links'))
+
+      page('/')
+    })
+})
+
+page('*', notfound)
+
+function notfound(ctx, next) {
+  console.log('not found')
+}
+
+function is_user_signed_in(ctx, next) {
+  if (App.auth)
+    next()
+  else
+    page('/')
+};
+
+// Start it
+$(function() {
+  page()
+
+  // render the links component since it always stays up anyways.
+  React.renderComponent(linksComponents(), document.getElementById('links'))
+})
+
+// Components
 
 var DashboardComponent = React.createClass({
   handleClick: function(e) {
@@ -129,7 +131,7 @@ var loginComponent = React.createClass({
           React.renderComponent(linksComponents(), document.getElementById('links'))
           React.unmountComponentAtNode(document.getElementById('flash'))
 
-          window.location = '#/dashboard'
+          page('/')
         }
       })
   },
@@ -176,14 +178,9 @@ var Form = React.createClass({
 var linksComponents = React.createClass({
   render: function() {
     return <ul>
-        <li className={App.hasOwnProperty('auth') ? 'hide' : ''}><a href="#/login">Login</a></li>
-        <li className={App.hasOwnProperty('auth') ? '' : 'hide'}><a href="#/logout">Logout</a></li>
+        <li className={App.hasOwnProperty('auth') ? 'hide' : ''}><a href="/login">Login</a></li>
+        <li className={App.hasOwnProperty('auth') ? '' : 'hide'}><a href="/logout">Logout</a></li>
     </ul>;
   }
 });
 
-// render the links component since it always stays up anyways.
-React.renderComponent(linksComponents(), document.getElementById('links'))
-
-// Run it!
-app.run('#/')
