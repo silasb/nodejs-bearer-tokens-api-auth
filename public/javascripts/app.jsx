@@ -142,17 +142,24 @@ var loginComponent = React.createClass({
   // in, so we can render it disabled initially, and then enable it when
   // everything has loaded
   render: function() {
-    return <Form callback={this.handleLogin}>
-        <label>Username:
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange}/>
-        </label>
-        <br/>
-        <label>Password:
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange}/>
-        </label>
-        <br/>
-        <button onClick={this.handleLogin}>Login</button>
-      </Form>
+    return <div className="row">
+      <div className="col-md-4 col-md-offset-4">
+        <Form callback={this.handleLogin}>
+          <div className="form-group">
+            <label>Username:</label>
+            <input name="username" type="text" value={this.state.username} onChange={this.handleChange} className="form-control" />
+          </div>
+
+          <div className="form-group">
+            <label>Password:</label>
+            <input name="password" type="password" value={this.state.password} onChange={this.handleChange} className="form-control" />
+
+          </div>
+
+          <button onClick={this.handleLogin} className="btn btn-default">Login</button>
+        </Form>
+      </div>
+    </div>
   },
 })
 
@@ -168,7 +175,7 @@ var Form = React.createClass({
 
   render: function() {
     return this.transferPropsTo(
-      <form onClick={this.onSubmit} action="#">
+      <form onClick={this.onSubmit} action="#" className="form">
         {this.props.children}
       </form>
     )
