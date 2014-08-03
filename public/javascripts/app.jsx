@@ -34,6 +34,24 @@ page('/logout', is_user_signed_in, function(ctx) {
     })
 })
 
+page('/events', is_user_signed_in, function(ctx) {
+  request
+    .get('/api/events')
+    .set({'Authorization': 'Bearer ' + App.auth.token})
+    .on('error', function(res) {
+      console.log('failed to logout')
+    })
+    .end(function(res) {
+      React.renderComponent(eventIndexComponent({events: res.body}), $('.content')[0])
+    })
+})
+
+page('/events/:id', is_user_signed_in, function(ctx) {
+  var id = ctx.params.id;
+
+  React.renderComponent(eventComponent({id: id}), $('.content')[0])
+})
+
 page('*', notfound)
 
 function notfound(ctx, next) {
@@ -236,10 +254,43 @@ var Form = React.createClass({
 
 var linksComponents = React.createClass({
   render: function() {
+    if (App.hasOwnProperty('auth')) {
+      auth_links = <li><a href="/events">Events</a></li>
+    } else {
+      auth_links = '';
+    }
+
     return <ul>
         <li className={App.hasOwnProperty('auth') ? 'hide' : ''}><a href="/login">Login</a></li>
         <li className={App.hasOwnProperty('auth') ? '' : 'hide'}><a href="/logout">Logout</a></li>
+        {auth_links}
     </ul>;
   }
 });
 
+var eventIndexComponent = React.createClass({
+  render: function() {
+    events = this.props.events;
+    event_list = []
+
+    for(var event in events) {
+      var el = <li>
+          <a href={'/events/' + events[event].id}>{events[event].name}</a>
+        </li>;
+
+      event_list.push(el)
+    }
+
+    return <ul>
+      {event_list}
+    </ul>;
+  }
+})
+
+var eventComponent = React.createClass({
+  render: function() {
+    var id = this.props.id;
+
+    return <p>{id}</p>;
+  }
+})

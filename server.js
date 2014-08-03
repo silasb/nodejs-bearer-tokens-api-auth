@@ -239,8 +239,15 @@ app.get('/api/me',
 app.get('/api/events',
   passport.authenticate('bearer', {session: false}),
   function(req, res) {
-    res.json([{name: 'Event1'}])
+    res.json([
+      {name: 'Event 1', id: '1'},
+      {name: 'Event 2', id: '2'}
+    ])
   });
+
+app.get('*', function(req, res) {
+  res.redirect('/')
+})
 
 // Start the server
 http.createServer(app).listen(app.get('port'), function(){
