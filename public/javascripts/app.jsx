@@ -112,7 +112,7 @@ var EventListComponent = React.createClass({
 
     var height = $('.header').innerHeight();
 
-    $('.calendar-view').css('height', window.innerHeight - height);
+    $('.calendar-view').css('height', window.innerHeight - height - 50);
 
     //$('#events-calendar').fullCalendar('option', 'height', 'auto');
   },
