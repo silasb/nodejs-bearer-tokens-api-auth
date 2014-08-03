@@ -236,6 +236,12 @@ app.get('/api/me',
     res.json({something: 'important'})
   });
 
+app.get('/api/events',
+  passport.authenticate('bearer', {session: false}),
+  function(req, res) {
+    res.json([{name: 'Event1'}])
+  });
+
 // Start the server
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
