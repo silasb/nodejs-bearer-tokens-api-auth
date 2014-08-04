@@ -9,13 +9,13 @@ App = {}
 // Routing
 page('/', function(ctx, next) {
   if (App.auth)
-    React.renderComponent(EventListComponent(), $('.content')[0])
+    React.renderComponent(<EventListComponent />, $('.content')[0])
   else
-    React.renderComponent(loginComponent(), $('.content')[0] )
+    React.renderComponent(<loginComponent />, $('.content')[0] )
 })
 
 page('/login', function(ctx, next) {
-  React.renderComponent(loginComponent(), $('.content')[0] )
+  React.renderComponent(<loginComponent />, $('.content')[0] )
 })
 
 page('/logout', is_user_signed_in, function(ctx) {
@@ -28,7 +28,7 @@ page('/logout', is_user_signed_in, function(ctx) {
     .end(function(res) {
       delete App.auth
 
-      React.renderComponent(linksComponents(), document.getElementById('links'))
+      React.renderComponent(<linksComponents />, document.getElementById('links'))
 
       page('/')
     })
@@ -42,14 +42,14 @@ page('/events', is_user_signed_in, function(ctx) {
       console.log('failed to logout')
     })
     .end(function(res) {
-      React.renderComponent(eventIndexComponent({events: res.body}), $('.content')[0])
+      React.renderComponent(<eventIndexComponent events={res.body} />, $('.content')[0])
     })
 })
 
 page('/events/:id', is_user_signed_in, function(ctx) {
   var id = ctx.params.id;
 
-  React.renderComponent(eventComponent({id: id}), $('.content')[0])
+  React.renderComponent(<eventComponent id={id} />, $('.content')[0])
 })
 
 page('*', notfound)
@@ -70,7 +70,7 @@ $(function() {
   page()
 
   // render the links component since it always stays up anyways.
-  React.renderComponent(linksComponents(), document.getElementById('links'))
+  React.renderComponent(<linksComponents />, document.getElementById('links'))
 })
 
 // Components
@@ -192,13 +192,13 @@ var loginComponent = React.createClass({
         if (res.status == 401) {
           console.log('not authorized')
 
-          React.renderComponent(FlashComponent({shown: true, message: 'Incorrect username or password.'}), document.getElementById('flash'))
+          React.renderComponent(<FlashComponent shown='true' message='Incorrect username or password.' />, document.getElementById('flash'))
         } else {
           auth = JSON.parse(res.text)
 
           App.auth = auth;
 
-          React.renderComponent(linksComponents(), document.getElementById('links'))
+          React.renderComponent(<linksComponents />, document.getElementById('links'))
           React.unmountComponentAtNode(document.getElementById('flash'))
 
           page('/')
