@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
+var nodemon = require('gulp-nodemon');
 
 gulp.task('jsx', function() {
   return gulp.src('client/javascripts/app.jsx', {read: false})
@@ -11,8 +12,6 @@ gulp.task('jsx', function() {
     .pipe(rename('app.js'))
     .pipe(gulp.dest('public/javascripts/'));
 });
-
-var nodemon = require('gulp-nodemon');
 
 gulp.task('default', ['jsx'], function() {
   gulp.watch('client/javascripts/**/*.jsx', ['jsx'])
