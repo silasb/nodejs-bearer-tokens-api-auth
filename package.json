@@ -10,15 +10,18 @@
     "browserify": "^4.1.11",
     "envify": "^1.2.1",
     "express": "3.0.6",
+    "gulp-rename": "^1.2.0",
     "jade": "*",
     "jsonwebtoken": "^0.4.0",
     "literalify": "^0.3.0",
     "react": "^0.10.0",
     "react-tools": "^0.10.0",
+    "reactify": "^0.14.0",
     "rethinkdb": "^1.13.0-0"
   },
   "devDependencies": {
     "gulp": "^3.8.6",
+    "gulp-browserify": "^0.5.0",
     "gulp-nodemon": "^1.0.4",
     "gulp-react": "^0.5.0",
     "minimist": "^0.2.0",
