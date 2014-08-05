@@ -9,13 +9,7 @@ var linksComponents = require('./components/links');
 // Main application state
 App = {}
 
-// Start it
-$(function() {
-  page()
+page()
 
-  // render the links component since it always stays up anyways.
-  React.renderComponent(<linksComponents />, document.getElementById('links'))
-})
-
-// Components
-
+// render the links component since it always stays up anyways.
+React.renderComponent(<linksComponents />, document.getElementById('links'))
