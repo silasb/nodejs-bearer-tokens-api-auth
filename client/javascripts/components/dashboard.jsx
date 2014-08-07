@@ -4,7 +4,7 @@ var DashboardComponent = React.createClass({
 
     request
       .get('/api/me')
-      .set({'Authorization': 'Bearer ' + App.auth.token})
+      .set({'Authorization': 'Bearer ' + App.auth().token})
       .on('error', function(res) {
         console.log('failed')
       })

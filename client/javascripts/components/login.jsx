@@ -1,5 +1,6 @@
 var Form = require('./form');
 var linksComponents = require('./links');
+var FlashComponent = require('./flash');
 
 var loginComponent = React.createClass({
 
@@ -34,7 +35,7 @@ var loginComponent = React.createClass({
         } else {
           auth = JSON.parse(res.text)
 
-          App.auth = auth;
+          App.saveAuth(auth);
 
           React.renderComponent(<linksComponents />, document.getElementById('links'))
           React.unmountComponentAtNode(document.getElementById('flash'))

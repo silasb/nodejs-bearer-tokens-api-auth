@@ -1,13 +1,14 @@
 /** @jsx React.DOM */
 
 var loginComponent = require('./components/login');
+var linksComponents = require('./components/links');
 var EventListComponent = require('./components/event_list');
 var eventIndexComponent = require('./components/event_list_index');
 var eventComponent = require('./components/event_list_show');
 
 // Routing
 page('/', function(ctx, next) {
-  if (App.auth)
+  if (App.auth())
     React.renderComponent(<EventListComponent />, $('.content')[0])
   else
     React.renderComponent(<loginComponent />, $('.content')[0] )
@@ -20,12 +21,12 @@ page('/login', function(ctx, next) {
 page('/logout', is_user_signed_in, function(ctx) {
   request
     .get('/logout')
-    .set({'Authorization': 'Bearer ' + App.auth.token})
+    .set({'Authorization': 'Bearer ' + App.auth().token})
     .on('error', function(res) {
       console.log('failed to logout')
     })
     .end(function(res) {
-      delete App.auth
+      App.deleteAuth();
 
       React.renderComponent(<linksComponents />, document.getElementById('links'))
 
@@ -36,7 +37,7 @@ page('/logout', is_user_signed_in, function(ctx) {
 page('/events', is_user_signed_in, function(ctx) {
   request
     .get('/api/events')
-    .set({'Authorization': 'Bearer ' + App.auth.token})
+    .set({'Authorization': 'Bearer ' + App.auth().token})
     .on('error', function(res) {
       console.log('failed to logout')
     })
@@ -58,8 +59,9 @@ function notfound(ctx, next) {
 }
 
 function is_user_signed_in(ctx, next) {
-  if (App.auth)
+  if (App.auth())
     next()
   else
     page('/')
+
 };

@@ -211,17 +211,20 @@ app.post('/login',
 // Require that the user be logged in.
 // Update the user to make their current token `null` then log out the user.
 app.get('/logout',
-  passport.authenticate('bearer', {session: false}),
+  //passport.authenticate('bearer', {session: false}),
   function(req, res) {
+    if (req.user) {
+      r.table('users').
+        get(req.user.id).
+        update({token: null}).run(connection, function(err, result) {
 
-    r.table('users').
-      get(req.user.id).
-      update({token: null}).run(connection, function(err, result) {
+        if (err) throw err;
 
-      if (err) throw err;
-
-      req.logout();
-    });
+        req.logout();
+      });
+    } else {
+      res.redirect('/')
+    }
 
     res.end();
   });
