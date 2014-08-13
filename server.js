@@ -45,9 +45,7 @@ r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
   }
 
   if (createDB) {
-    if (!createDB) {
-      r.dbDrop('webApp').run(conn, function(err, result) { if(err) throw err; });
-    }
+    r.dbDrop('webApp').run(conn, function(err, result) { if(err) throw err; });
 
     r.dbCreate('webApp').run(conn, function(err, result) {
       if (err) throw err;
