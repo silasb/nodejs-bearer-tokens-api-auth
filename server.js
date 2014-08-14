@@ -103,9 +103,12 @@ function findByToken(token, fn) {
     if (err) return fn(null, null);
 
     r.table('users').get(decoded.id).
-      pluck('token').
       run(connection, function(err, result) {
         if (err) throw err;
+
+        if (!result) {
+          return fn(null, null);
+        }
 
         if (result.token == token) {
           return fn(null, decoded);
@@ -231,11 +234,20 @@ app.get('/logout',
 //
 // requires `access_token` GET param or `Authorization: Bearer TOKEN` header
 // included in the request.
-app.get('/api/me',
-  passport.authenticate('bearer', {session: false}),
-  function(req, res) {
-    res.json({something: 'important'})
-  });
+app.get('/api/me', function(req, res, next) {
+  passport.authenticate('bearer', {session: false},
+    function(err, user, info) {
+      console.log(err, user, info)
+      if (!user) {
+        res.status(401)
+        res.setHeader('Location', '/api/login')
+        res.end()
+      } else {
+        res.json(req.user)
+      }
+    }
+  )(req, res, next);
+});
 
 app.get('/api/events',
   passport.authenticate('bearer', {session: false}),
