@@ -5,6 +5,7 @@ var linksComponents = require('./components/links');
 var EventListComponent = require('./components/event_list');
 var eventIndexComponent = require('./components/event_list_index');
 var eventComponent = require('./components/event_list_show');
+var EventCreateComponent = require('./components/event_create');
 
 // Routing
 page('/', function(ctx, next) {
@@ -44,6 +45,10 @@ page('/events', is_user_signed_in, function(ctx) {
     .end(function(res) {
       React.renderComponent(<eventIndexComponent events={res.body} />, $('.content')[0])
     })
+})
+
+page('/events/new', is_user_signed_in, function(ctx) {
+  React.renderComponent(<EventCreateComponent />, $('.content')[0])
 })
 
 page('/events/:id', is_user_signed_in, function(ctx) {

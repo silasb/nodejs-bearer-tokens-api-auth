@@ -49,11 +49,19 @@ r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
 
     r.dbCreate('webApp').run(conn, function(err, result) {
       if (err) throw err;
+
+      r.db('webApp').tableCreate('events').run(conn, function(err, result) {
+        if (err) throw err;
+
+        console.log(JSON.stringify(result, null, 2));
+      });
+
       r.db('webApp').tableCreate('users').run(conn, function(err, result) {
         if (err) throw err;
         console.log(JSON.stringify(result, null, 2));
 
         conn.use('webApp');
+
 
         r.table('users').indexCreate('username').run(conn, function(err, result) {
           if (err) throw err;
@@ -256,6 +264,16 @@ app.get('/api/events',
       {name: 'Event 1', id: '1'},
       {name: 'Event 2', id: '2'}
     ])
+  });
+
+app.post('/api/events',
+  passport.authenticate('bearer', {session: false}),
+  function(req, res) {
+    r.table('events').insert(req.body).run(connection, function(err, result) {
+      if (err) throw err;
+
+      res.json(result);
+    })
   });
 
 app.get('*', function(req, res) {

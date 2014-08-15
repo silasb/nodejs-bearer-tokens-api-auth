@@ -1,7 +1,10 @@
 var linksComponents = React.createClass({
   render: function() {
     if (App.auth()) {
-      auth_links = <li><a href="/events">Events</a></li>
+      auth_links = [
+        <li><a href="/events">Events</a></li>,
+        <li><a href="/events/new">New Events</a></li>
+      ]
     } else {
       auth_links = '';
     }
